@@ -1,60 +1,81 @@
-// Completed by: Theresa T, Adam E, Tyler R, Liz H. on 7/28/2016
-
-var atticus = ["Atticus", "2405", "47000", 3];
-var jem = ["Jem", "62347", "63500", 4];
-var boo = ["Boo", "11435", "54000", 3];
-var scout = ["Scout", "6243", "74750", 5];
+var atticus = ['Atticus', '2405', '47000', 3];
+var jem = ['Jem', '62347', '63500', 4];
+var boo = ['Boo', '11435', '54000', 3];
+var scout = ['Scout', '6243', '74750', 5];
 
 var employees = [atticus, jem, boo, scout];
-var empSTIArray = [];
 
-employees.forEach(fun);
+var objEmployees = [];
+var processedEmployees = [];
 
-//functions
-function fun(array) {
-  var empArray = [];
-  var bonus;
-  array[2] = parseInt(array[2]);
+function Person(name, empNumber, currentSalary, rating) {
+  this.name = name;
+  this.empNumber = empNumber;
+  this.currentSalary = currentSalary;
+  this.rating = rating;
+}
 
-  empArray.push(array[0]);
+for (var i = 0; i < employees.length; i++) {
+  var name = employees[i][0];
+  var empNumber = employees[i][1];
+  var currentSalary = employees[i][2];
+  var rating = employees[i][3];
+  var employee = new Person(name, empNumber, currentSalary, rating);
+  objEmployees.push(employee);
+}
 
-  switch(array[3]){
+function calculateSTI(employeeObj) {
+  var name = employeeObj.name;
+  var empNumber = employeeObj.empNumber;
+  var currentSalary = Math.round(parseInt(employeeObj.currentSalary));
+  var rating = employeeObj.rating;
+
+  var bonusPercent = 0;
+  var bonusMoney = 0;
+  var totalSalary = 0;
+
+  switch (rating){
+    case 0:
+    case 1:
     case 2:
-      bonus = 0;                  //bonus is saved as float
+      bonusPercent += 0;
       break;
     case 3:
-      bonus = 0.04;
+      bonusPercent += 0.04;
       break;
     case 4:
-      bonus = 0.06;
+      bonusPercent += 0.06;
       break;
     case 5:
-      bonus = 0.1;
+      bonusPercent += 0.1;
       break;
-    }
+    default:
+      bonusPercent += 0;
+  }
 
+  if (empNumber.length == 4) {
+    bonusPercent += 0.05;
+  }
 
-    if(array[1].length == 4) {
-      bonus += 0.05;
-      parseInt(array[1]);
-    }
+  if (currentSalary > 65000) {
+    bonusPercent -= 0.01;
+  }
 
-    if (array[2] > 65000) {
-      bonus -= 0.01;
-    }
-    if (bonus >= 0.13) {
-      bonus = 0.13;
-    }
+  if (bonusPercent > 0.13) {
+    bonusPercent = 0.13;
+  }
 
-    var bonusAmount = bonus * array[2];
-    var salary =  bonusAmount + array[2];
+  employeeObj.bonusPercent = bonusPercent;
 
-    empArray[1] = bonus ;
-    empArray[2] = salary;
-    empArray[3] = Math.round(bonusAmount);
+  bonusMoney = Math.round(bonusPercent * currentSalary);
+  totalSalary = (bonusMoney + currentSalary);
 
+  employeeObj.totalSalary = totalSalary;
+  employeeObj.bonusMoney = bonusMoney;
 
-
-    empSTIArray.push(empArray);
-    console.log(empArray);
+  processedEmployees.push(employeeObj);
 }
+
+objEmployees.forEach(calculateSTI);
+
+console.log('processedEmployees: ', processedEmployees);
